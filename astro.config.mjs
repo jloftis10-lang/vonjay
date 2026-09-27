@@ -4,7 +4,6 @@ import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  // TODO(confirm): final production domain
   site: 'https://vonjaymusic.com',
   adapter: vercel(),
   // Roster of one: /artists goes straight to VonJay. Replace with a roster page when a second artist signs.

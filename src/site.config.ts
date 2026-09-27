@@ -1,10 +1,10 @@
 // Single source of truth for site-wide facts.
 // Anything marked TODO must come from Jon — do not invent values.
 export const site = {
-  name: 'VonJay Music',
+  name: 'VonJay',
   tagline: 'Chicago, a touch of Nashville melting into Atlanta.',
   location: 'Smyrna, Georgia',
-  domain: 'vonjaymusic.com', // TODO(confirm)
+  domain: 'vonjaymusic.com',
   contactEmail: '', // TODO(jon): public booking/contact email
   storeUrl: 'https://vonjay.base44.app/',
   storeName: 'Von Jay Productions',

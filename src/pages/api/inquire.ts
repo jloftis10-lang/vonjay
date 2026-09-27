@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { RESEND_FROM, INQUIRY_TO } from 'astro:env/server';
 import { supabaseAdmin, resend, json, isEmail, clean } from '../../lib/server';
 import { isInquiryType } from '../../lib/inquiry';
+import { site } from '../../site.config';
 
 export const prerender = false;
 
@@ -35,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
         from: RESEND_FROM,
         to,
         replyTo: inquiry.email,
-        subject: `[VonJay Music] ${inquiry.type}: ${inquiry.name}`,
+        subject: `[${site.name}] ${inquiry.type}: ${inquiry.name}`,
         text: `${inquiry.name} <${inquiry.email}>\n${inquiry.type}\n\n${inquiry.message}`,
       })
       .catch((err) => console.error('inquiry email failed', err));
