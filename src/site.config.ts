@@ -20,7 +20,6 @@ export const site = {
 
 export const nav = [
   { href: '/music', label: 'Music' },
-  { href: '/artists/vonjay', label: 'Artists' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
