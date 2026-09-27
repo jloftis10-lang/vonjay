@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { RESEND_FROM, INQUIRY_TO } from 'astro:env/server';
 import { supabaseAdmin, resend, json, isEmail, clean } from '../../lib/server';
 
 export const prerender = false;
@@ -24,12 +25,12 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // Notification is best-effort: the inquiry is already saved.
-  const to = import.meta.env.INQUIRY_TO;
+  const to = INQUIRY_TO;
   const client = resend();
-  if (client && to) {
+  if (client && to && RESEND_FROM) {
     await client.emails
       .send({
-        from: import.meta.env.RESEND_FROM,
+        from: RESEND_FROM,
         to,
         replyTo: inquiry.email,
         subject: `[VonJay Music] ${inquiry.type}: ${inquiry.name}`,
