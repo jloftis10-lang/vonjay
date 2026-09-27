@@ -21,7 +21,6 @@ export const site = {
 export const nav = [
   { href: '/music', label: 'Music' },
   { href: '/artists/vonjay', label: 'Artists' },
-  { href: '/productions', label: 'Productions' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];

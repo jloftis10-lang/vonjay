@@ -45,18 +45,10 @@ const featured = [...rest.filter((r) => r.data.featured), ...rest.filter((r) => 
     <h2 class="text-5xl">Three cities, one sound</h2>
     <div class="prose-measure space-y-4">
       <p>{site.tagline}</p>
-      <!-- TODO(jon): 2–3 sentences on the sound and the company, in his words. -->
+      <!-- TODO(jon): 2–3 sentences on the sound, in his words. -->
       <p><a href="/about">About VonJay Music</a></p>
     </div>
   </section>
 
   <EmailSignup />
-
-  <section class="wrap grid gap-6 py-20 md:grid-cols-[2fr_1fr] md:items-end">
-    <div>
-      <h2 class="text-5xl">Working on a record?</h2>
-      <p class="mt-3 prose-measure">VonJay Music is a production company in {site.location}.</p>
-    </div>
-    <p><a href="/productions" class="btn">See productions</a></p>
-  </section>
 </Base>

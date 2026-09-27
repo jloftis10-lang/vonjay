@@ -9,7 +9,7 @@ const socials = Object.entries({
   <div class="wrap grid gap-8 py-12 md:grid-cols-3">
     <div>
       <p class="font-display text-2xl font-extrabold text-white">{site.name}</p>
-      <p class="text-denim-soft">A production company based in {site.location}.</p>
+      <p class="text-denim-soft">Based in {site.location}.</p>
     </div>
     <ul class="space-y-1">
       {socials.map(([label, href]) => <li><a href={href} class="hover:text-brass" rel="me">{label}</a></li>)}

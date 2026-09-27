@@ -33,14 +33,4 @@ const artists = defineCollection({
   }),
 });
 
-const services = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    order: z.number().default(0),
-    draft: z.boolean().default(true),
-  }),
-});
-
-export const collections = { releases, artists, services };
+export const collections = { releases, artists };
