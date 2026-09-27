@@ -7,6 +7,8 @@ export default defineConfig({
   // TODO(confirm): final production domain
   site: 'https://vonjaymusic.com',
   adapter: vercel(),
+  // Roster of one: /artists goes straight to VonJay. Replace with a roster page when a second artist signs.
+  redirects: { '/artists': { status: 302, destination: '/artists/vonjay' } },
   // Server secrets are read at runtime via astro:env/server. import.meta.env inlines them at
   // build time instead: a build without them compiled the API routes into permanent failures.
   env: {
