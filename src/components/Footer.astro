@@ -1,0 +1,22 @@
+---
+import { site } from '../site.config';
+const socials = Object.entries({
+  SoundCloud: site.socials.soundcloud, Spotify: site.socials.spotify, 'Apple Music': site.socials.appleMusic,
+  Instagram: site.socials.instagram, TikTok: site.socials.tiktok, YouTube: site.socials.youtube,
+}).filter(([, href]) => href);
+---
+<footer class="bg-midnight text-mist mt-24">
+  <div class="wrap grid gap-8 py-12 md:grid-cols-3">
+    <div>
+      <p class="font-display text-2xl font-extrabold text-white">{site.name}</p>
+      <p class="text-denim-soft">A production company based in {site.location}.</p>
+    </div>
+    <ul class="space-y-1">
+      {socials.map(([label, href]) => <li><a href={href} class="hover:text-brass" rel="me">{label}</a></li>)}
+    </ul>
+    <div>
+      <p>Apparel, vinyl and more at the <a href={site.storeUrl} class="text-brass hover:text-white">{site.storeName} store</a>.</p>
+      <p class="mt-4 text-sm text-denim-soft">© {new Date().getFullYear()} {site.name}</p>
+    </div>
+  </div>
+</footer>

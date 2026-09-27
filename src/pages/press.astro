@@ -1,0 +1,28 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getReleases } from '../lib/content';
+import { site } from '../site.config';
+const artist = await getEntry('artists', 'vonjay');
+const top = (await getReleases()).filter((r) => r.data.featured).slice(0, 3);
+---
+<Base title="Press kit" description={`Bio, photos and music for press and bookers covering ${site.name}.`}>
+  <section class="wrap py-16 space-y-12">
+    <h1 class="text-7xl md:text-8xl">Press kit</h1>
+    <div class="prose-measure space-y-3">
+      <h2 class="text-4xl">Short bio</h2>
+      <p>{artist?.data.short}</p>
+      <!-- TODO(jon): 50-word and 150-word bios. -->
+    </div>
+    <div>
+      <h2 class="text-4xl">Songs to hear</h2>
+      <ul class="mt-3 space-y-1">{top.map((r) => <li><a href={`/music/${r.id}`}>{r.data.title}</a></li>)}</ul>
+    </div>
+    <div class="prose-measure">
+      <h2 class="text-4xl">Photos</h2>
+      <p class="mt-3 text-denim">High-resolution photos coming soon.</p>
+      <!-- TODO(jon): add press photos to /public/press and link downloads here. -->
+    </div>
+    <p><a href="/contact" class="btn">Contact for press</a></p>
+  </section>
+</Base>

@@ -1,0 +1,22 @@
+---
+import { site, nav } from '../site.config';
+const path = Astro.url.pathname;
+---
+<header class="bg-midnight text-white">
+  <div class="wrap flex flex-wrap items-center justify-between gap-4 py-4">
+    <a href="/" class="font-display text-2xl font-black no-underline tracking-tight">{site.name}</a>
+    <nav aria-label="Main">
+      <ul class="flex flex-wrap gap-x-6 gap-y-1 text-lg font-display font-bold">
+        {nav.map((item) => {
+          const active = path.startsWith(item.href);
+          return (
+            <li>
+              <a href={item.href} aria-current={active ? 'page' : undefined}
+                 class:list={['no-underline hover:text-brass', active && 'text-brass']}>{item.label}</a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  </div>
+</header>

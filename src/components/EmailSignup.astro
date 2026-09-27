@@ -1,0 +1,39 @@
+---
+interface Props { heading?: string; blurb?: string; }
+const {
+  heading = 'Hear new songs first',
+  blurb = 'One email when something new is out. Nothing else.',
+} = Astro.props;
+---
+<section class="bg-oxblood text-white">
+  <div class="wrap grid gap-6 py-14 md:grid-cols-2 md:items-end">
+    <div>
+      <h2 class="text-5xl">{heading}</h2>
+      <p class="mt-3 text-mist prose-measure">{blurb}</p>
+    </div>
+    <form data-signup class="flex flex-wrap gap-3" novalidate>
+      <label for="signup-email" class="sr-only">Email address</label>
+      <input id="signup-email" name="email" type="email" required autocomplete="email"
+             placeholder="you@example.com" class="field min-w-0 flex-[1_1_16rem]" />
+      <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+      <button type="submit" class="btn">Sign up</button>
+      <p data-status role="status" class="basis-full text-mist"></p>
+    </form>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-signup]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      if (!form.checkValidity()) { status.textContent = 'Enter a valid email address.'; return; }
+      status.textContent = 'Signing you up…';
+      const res = await fetch('/api/subscribe', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data),
+      }).catch(() => null);
+      if (res?.ok) { form.reset(); status.textContent = 'You’re signed up. Watch your inbox for the next release.'; }
+      else status.textContent = 'Sign-up didn’t go through. Check the address and try again.';
+    });
+  });
+</script>

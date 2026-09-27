@@ -1,0 +1,18 @@
+---
+interface Props { url: string; title: string; compact?: boolean; }
+const { url, title, compact = false } = Astro.props;
+const params = new URLSearchParams({
+  url, color: '#c49a4c', auto_play: 'false', hide_related: 'true',
+  show_comments: 'false', show_user: 'true', show_reposts: 'false', visual: 'false',
+});
+const src = `https://w.soundcloud.com/player/?${params}`;
+---
+<iframe
+  title={`Play ${title} on SoundCloud`}
+  src={src}
+  width="100%"
+  height={compact ? 120 : 166}
+  loading="lazy"
+  allow="autoplay"
+  class="block w-full border-0"
+></iframe>

@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { site } from '../site.config';
+---
+<Base title="Contact" description="Booking, production and press inquiries.">
+  <section class="wrap py-16">
+    <h1 class="text-7xl md:text-8xl">Contact</h1>
+    <p class="mt-6 text-xl prose-measure">Booking, production work or press: pick a topic and we’ll route it.</p>
+    {site.contactEmail && <p class="mt-2">Or email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</p>}
+    <div class="mt-10"><InquiryForm /></div>
+  </section>
+</Base>

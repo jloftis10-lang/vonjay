@@ -1,0 +1,44 @@
+---
+const types = ['Booking a show', 'Production work', 'Press or interview', 'Something else'];
+---
+<form data-inquiry class="grid gap-5 prose-measure" novalidate>
+  <div class="grid gap-2">
+    <label for="inq-type" class="font-semibold">What’s this about?</label>
+    <select id="inq-type" name="type" class="field" required>
+      {types.map((t) => <option>{t}</option>)}
+    </select>
+  </div>
+  <div class="grid gap-2">
+    <label for="inq-name" class="font-semibold">Your name</label>
+    <input id="inq-name" name="name" class="field" required autocomplete="name" />
+  </div>
+  <div class="grid gap-2">
+    <label for="inq-email" class="font-semibold">Email</label>
+    <input id="inq-email" name="email" type="email" class="field" required autocomplete="email" />
+  </div>
+  <div class="grid gap-2">
+    <label for="inq-message" class="font-semibold">Details</label>
+    <textarea id="inq-message" name="message" rows="6" class="field" required
+      placeholder="Dates, location, budget, links to your music: whatever helps."></textarea>
+  </div>
+  <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+  <div><button type="submit" class="btn">Send inquiry</button></div>
+  <p data-status role="status"></p>
+</form>
+<script>
+  const form = document.querySelector<HTMLFormElement>('form[data-inquiry]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { status.textContent = 'Fill in every field, with a valid email.'; return; }
+      status.textContent = 'Sending…';
+      const res = await fetch('/api/inquire', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      }).catch(() => null);
+      if (res?.ok) { form.reset(); status.textContent = 'Inquiry sent. Expect a reply by email.'; }
+      else status.textContent = 'Inquiry didn’t send. Try again, or email us directly.';
+    });
+  }
+</script>

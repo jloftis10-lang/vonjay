@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
+import { getReleases } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const artists = await getCollection('artists');
+  return artists.map((artist) => ({ params: { slug: artist.id }, props: { artist } }));
+}
+
+const { artist } = Astro.props;
+const { Content } = await render(artist);
+const releases = (await getReleases()).filter((r) => r.data.artist.id === artist.id);
+---
+<Base title={artist.data.name} description={artist.data.short} image={artist.data.photo}>
+  <section class="bg-midnight text-white">
+    <div class="wrap grid gap-10 py-14 md:grid-cols-[1fr_1fr] md:items-end">
+      <div>
+        <h1 class="text-8xl md:text-[10rem]">{artist.data.name}</h1>
+        <p class="mt-4 text-xl text-mist prose-measure">{artist.data.short}</p>
+        {artist.data.hometown && <p class="mt-2 text-denim-soft">{artist.data.hometown}</p>}
+      </div>
+      {artist.data.photo
+        ? <img src={artist.data.photo} alt={`${artist.data.name}`} class="w-full rounded-sm object-cover" />
+        : <div class="aspect-[4/5] w-full bg-denim/40 grid place-items-center text-denim-soft">Photo coming soon</div>}
+    </div>
+  </section>
+  <section class="wrap py-16 prose-measure space-y-4"><Content /></section>
+  <section class="wrap pb-8">
+    <h2 class="text-5xl">Discography</h2>
+    <div class="mt-8 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+      {releases.map((r) => <ReleaseCard release={r} />)}
+    </div>
+  </section>
+</Base>

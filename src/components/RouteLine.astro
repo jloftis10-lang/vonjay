@@ -1,0 +1,15 @@
+---
+// The signature element: the three cities in his sound, north to south.
+const stops = ['Chicago', 'Nashville', 'Atlanta'];
+---
+<div class="relative">
+  <span aria-hidden="true" class="absolute left-1.5 right-1.5 top-[0.55rem] h-0.5 bg-brass"></span>
+  <ol class="relative flex justify-between font-display text-lg font-bold md:text-xl">
+    {stops.map((city) => (
+      <li class="flex flex-col items-start gap-2 last:items-end">
+        <span aria-hidden="true" class="h-3.5 w-3.5 rounded-full bg-brass ring-4 ring-midnight"></span>
+        <span>{city}</span>
+      </li>
+    ))}
+  </ol>
+</div>

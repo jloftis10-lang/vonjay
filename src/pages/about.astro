@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import RouteLine from '../components/RouteLine.astro';
+import { site } from '../site.config';
+---
+<Base title="About" description={`${site.name} is a production company in ${site.location}.`}>
+  <section class="bg-midnight text-white">
+    <div class="wrap py-16">
+      <h1 class="text-7xl md:text-8xl">About VonJay Music</h1>
+      <div class="mt-10 max-w-lg"><RouteLine /></div>
+    </div>
+  </section>
+  <section class="wrap py-16 prose-measure space-y-5">
+    <p class="text-xl">{site.tagline}</p>
+    <!-- TODO(jon): company story — why Georgia, why now, what it stands for. -->
+    <!-- TODO(jon + Jimmy): team section. Decide who is named and with what titles. -->
+  </section>
+</Base>

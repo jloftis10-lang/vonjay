@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { getServices } from '../lib/content';
+import { site } from '../site.config';
+const services = await getServices();
+---
+<Base title="Productions" description={`Music production from VonJay Music in ${site.location}.`}>
+  <section class="wrap py-16">
+    <h1 class="text-7xl md:text-8xl">Productions</h1>
+    <p class="mt-6 text-xl prose-measure">VonJay Music works with artists out of {site.location}.</p>
+    <!-- TODO(jon): what the company offers and who it's for. Services render from src/content/services once draft: false. -->
+    {services.length > 0 ? (
+      <div class="mt-14 grid gap-10 md:grid-cols-2">
+        {services.map((s) => (
+          <article class="border-t-2 border-midnight pt-4">
+            <h2 class="text-4xl">{s.data.title}</h2>
+            <p class="mt-3 prose-measure">{s.data.summary}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="mt-10 prose-measure text-denim">Services are being finalized. Tell us about your project below and we’ll follow up.</p>
+    )}
+  </section>
+  <section class="wrap pb-8">
+    <h2 class="text-5xl">Start a project</h2>
+    <div class="mt-8"><InquiryForm /></div>
+  </section>
+</Base>

@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* Palette: denim, oxblood and brass, pulled from the Von Jay denim jacket
+   (burgundy lining, silver buttons) and pushed toward a night-drive feel. */
+@theme {
+  --color-midnight: #161b2e;
+  --color-denim: #34466b;
+  --color-denim-soft: #8b9bbd;
+  --color-oxblood: #6b1e28;
+  --color-brass: #c49a4c;
+  --color-mist: #e4e7ee;
+  --color-white: #fbfbfd;
+
+  /* Big Shoulders was drawn for the City of Chicago; Source Serif 4 carries the reading. */
+  --font-display: "Big Shoulders Display", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+
+@layer base {
+  html { background: var(--color-mist); color: var(--color-midnight); }
+  body { font-family: var(--font-body); font-size: 1.125rem; line-height: 1.65; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.005em; }
+  a { text-underline-offset: 0.2em; }
+  :focus-visible { outline: 3px solid var(--color-brass); outline-offset: 3px; }
+  ::selection { background: var(--color-brass); color: var(--color-midnight); }
+}
+
+@layer components {
+  .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
+  .prose-measure { max-width: 65ch; }
+  .btn {
+    display: inline-block; padding: 0.7rem 1.3rem; border-radius: 2px;
+    font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
+    background: var(--color-brass); color: var(--color-midnight); text-decoration: none;
+  }
+  .btn:hover { background: var(--color-white); }
+  .btn-quiet { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
+  .btn-quiet:hover { background: transparent; color: var(--color-brass); }
+  .field {
+    width: 100%; padding: 0.7rem 0.9rem; border-radius: 2px; font: inherit;
+    background: var(--color-white); color: var(--color-midnight); border: 2px solid var(--color-denim-soft);
+  }
+  .field:focus { border-color: var(--color-denim); outline: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

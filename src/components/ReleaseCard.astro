@@ -1,0 +1,13 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { release: CollectionEntry<'releases'>; }
+const { release } = Astro.props;
+const { title, date } = release.data;
+const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<article class="group border-t-2 border-midnight pt-4">
+  <h3 class="text-3xl md:text-4xl">
+    <a href={`/music/${release.id}`} class="no-underline group-hover:text-oxblood">{title}</a>
+  </h3>
+  <p class="mt-1 text-denim"><time datetime={date.toISOString()}>{fmt.format(date)}</time></p>
+</article>
