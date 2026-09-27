@@ -2,7 +2,7 @@
 // Anything marked TODO must come from Jon — do not invent values.
 export const site = {
   name: 'VonJay Music',
-  tagline: 'Chicago beats, a touch of Nashville, melting into Atlanta.',
+  tagline: 'Chicago, a touch of Nashville melting into Atlanta.',
   location: 'Smyrna, Georgia',
   domain: 'vonjaymusic.com', // TODO(confirm)
   contactEmail: '', // TODO(jon): public booking/contact email
