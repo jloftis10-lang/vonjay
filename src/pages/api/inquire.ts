@@ -1,11 +1,13 @@
 import type { APIRoute } from 'astro';
 import { RESEND_FROM, INQUIRY_TO } from 'astro:env/server';
 import { supabaseAdmin, resend, json, isEmail, clean } from '../../lib/server';
+import { isInquiryType } from '../../lib/inquiry';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const body = await request.json().catch(() => ({}));
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object') return json({ error: 'invalid' }, 400);
   if (body.company) return json({ ok: true }); // honeypot
 
   const inquiry = {
@@ -14,7 +16,7 @@ export const POST: APIRoute = async ({ request }) => {
     email: clean(body.email, 254).toLowerCase(),
     message: clean(body.message, 5000),
   };
-  if (!inquiry.name || !inquiry.message || !isEmail(inquiry.email)) return json({ error: 'invalid' }, 400);
+  if (!isInquiryType(inquiry.type) || !inquiry.name || !inquiry.message || !isEmail(inquiry.email)) return json({ error: 'invalid' }, 400);
 
   try {
     const { error } = await supabaseAdmin().from('inquiries').insert(inquiry);

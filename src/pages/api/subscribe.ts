@@ -4,7 +4,8 @@ import { supabaseAdmin, json, isEmail } from '../../lib/server';
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const body = await request.json().catch(() => ({}));
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object') return json({ error: 'invalid_email' }, 400);
   if (body.company) return json({ ok: true }); // honeypot
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
   if (!isEmail(email)) return json({ error: 'invalid_email' }, 400);
