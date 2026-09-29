@@ -1,54 +1,50 @@
 ---
 import Base from '../layouts/Base.astro';
-import SoundCloudEmbed from '../components/SoundCloudEmbed.astro';
 import RouteLine from '../components/RouteLine.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
 import EmailSignup from '../components/EmailSignup.astro';
 import { getReleases } from '../lib/content';
 import { site } from '../site.config';
-
 const releases = await getReleases();
-const [latest] = releases;
-const rest = releases.filter((r) => r.id !== latest?.id);
-// Featured picks first, topped up with the newest releases so the row is always full.
-const featured = [...rest.filter((r) => r.data.featured), ...rest.filter((r) => !r.data.featured)].slice(0, 3);
+const latest = releases.find((r) => r.id === 'song-unsung') ?? releases[0];
+const featured = ['one-king', 'stop-digging', 'buckle-bunny'].map((id) => releases.find((r) => r.id === id)).filter((r) => !!r);
 ---
-<Base>
-  <section class="bg-midnight text-white">
-    <div class="wrap grid gap-10 pb-16 pt-10 md:grid-cols-[1.1fr_1fr] md:items-end md:pt-16">
-      <div>
-        <p class="font-display text-xl font-bold text-brass">New from VonJay</p>
-        <h1 class="mt-2 text-7xl md:text-9xl">{latest?.data.title}</h1>
-        <div class="mt-8 max-w-md"><RouteLine /></div>
-      </div>
-      <div class="space-y-4">
-        {latest && <SoundCloudEmbed url={latest.data.soundcloudUrl} title={latest.data.title} />}
-        <a href={`/music/${latest?.id}`} class="text-mist hover:text-brass">The story behind the song</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap py-20">
-    <h2 class="text-5xl md:text-6xl">Start here</h2>
-    <div class="mt-8 grid gap-10 md:grid-cols-3">
-      {featured.map((r) => (
-        <div class="space-y-4">
-          <ReleaseCard release={r} />
-          <SoundCloudEmbed url={r.data.soundcloudUrl} title={r.data.title} compact />
+<Base description="Listen to VonJay: Chicago, a touch of Nashville melting into Atlanta. Explore the music and meet the artist.">
+  <section class="hero bg-midnight text-white" aria-labelledby="hero-title">
+    <div class="hero-image" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow text-brass">CHICAGO / NASHVILLE / ATLANTA</p>
+        <h1 id="hero-title">VON<span class="text-brass">JAY</span></h1>
+        <p class="hero-line">Chicago, a touch of Nashville<br /> melting into Atlanta.</p>
+        <div class="hero-release"><span class="eyebrow">FEATURED SONG</span><strong>{latest?.data.title}</strong></div>
+        <div class="flex flex-wrap gap-3 mt-8">
+          {latest && <button class="btn" data-play-track data-title={latest.data.title} data-url={latest.data.soundcloudUrl} type="button">▶ &nbsp; Play the song</button>}
+          <a class="btn btn-quiet" href="/music">Explore the music</a>
         </div>
-      ))}
-    </div>
-    <p class="mt-10"><a href="/music" class="btn btn-quiet">All music</a></p>
-  </section>
-
-  <section class="wrap grid gap-8 pb-20 md:grid-cols-[1fr_2fr]">
-    <h2 class="text-5xl">Three cities, one sound</h2>
-    <div class="prose-measure space-y-4">
-      <p>{site.tagline}</p>
-      <!-- TODO(jon): 2–3 sentences on the sound, in his words. -->
-      <p><a href="/about">About VonJay</a></p>
+      </div>
+      <p class="hero-number" aria-hidden="true">01 / VONJAY</p>
     </div>
   </section>
 
-  <EmailSignup />
+  <section class="section-pad bg-paper" id="start-here">
+    <div class="wrap">
+      <div class="section-heading"><div><p class="eyebrow">THE FIRST LISTEN</p><h2>Start here<span class="text-oxblood">.</span></h2></div><p>Three songs. Three ways into the sound.</p></div>
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        {featured.map((r, index) => <div><span class="eyebrow text-denim">0{index + 1} / LISTEN</span><ReleaseCard release={r} /></div>)}
+      </div>
+      <p class="mt-12"><a class="text-link" href="/music">Explore the full catalog <span aria-hidden="true">↗</span></a></p>
+    </div>
+  </section>
+
+  <section class="story-band bg-midnight text-white">
+    <div class="wrap story-grid">
+      <div class="story-photo"><img src="/images/vonjay-seated.png" alt="VonJay seated for a portrait" loading="lazy" /></div>
+      <div class="story-copy"><p class="eyebrow text-brass">MEET VONJAY</p><h2>There’s a person behind the sound.</h2><p>Get to know the artist whose music brings Chicago, Nashville and Atlanta into the same conversation.</p><div class="max-w-md mt-10"><RouteLine /></div><a href="/about" class="text-link mt-10 inline-block">Meet VonJay <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+
+  <section class="section-pad bg-paper"><div class="wrap catalog-teaser"><div><p class="eyebrow">THE MUSIC</p><h2>Keep listening.</h2><p class="mt-5 max-w-xl">Find the song you came for, or discover the next one.</p><a class="btn mt-8" href="/music">All songs</a></div><div class="catalog-type" aria-hidden="true">VJ<span>.</span></div></div></section>
+  <EmailSignup heading="Hear it first." blurb="New music and updates from VonJay, straight to your inbox." />
+  <section class="wrap closing-strip"><div><p class="eyebrow">MORE FROM VONJAY</p><h2>Music is only the beginning.</h2></div><div class="flex flex-wrap gap-3"><a class="btn btn-quiet" href={site.storeUrl} target="_blank" rel="noopener noreferrer">Visit the store ↗</a><a class="btn btn-quiet" href="/contact">Booking & contact</a></div></section>
 </Base>

@@ -1,51 +1,130 @@
 @import "tailwindcss";
-
-/* Palette: denim, oxblood and brass, pulled from the Von Jay denim jacket
-   (burgundy lining, silver buttons) and pushed toward a night-drive feel. */
 @theme {
-  --color-midnight: #161b2e;
-  --color-denim: #34466b;
-  --color-denim-soft: #8b9bbd;
-  --color-oxblood: #6b1e28;
-  --color-brass: #c49a4c;
-  --color-mist: #e4e7ee;
-  --color-white: #fbfbfd;
-
-  /* Big Shoulders was drawn for the City of Chicago; Source Serif 4 carries the reading. */
+  --color-midnight: #0e1114;
+  --color-denim: #52606b;
+  --color-denim-soft: #afb9bc;
+  --color-oxblood: #442627;
+  --color-brass: #cba777;
+  --color-mist: #e5e1d9;
+  --color-paper: #eeeae2;
+  --color-white: #faf8f3;
   --font-display: "Big Shoulders Display", "Arial Narrow", system-ui, sans-serif;
-  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Georgia, serif;
 }
-
 @layer base {
-  html { background: var(--color-mist); color: var(--color-midnight); }
-  body { font-family: var(--font-body); font-size: 1.125rem; line-height: 1.65; }
-  h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.005em; }
-  a { text-underline-offset: 0.2em; }
-  /* Brass on mist is 2.1:1, under the 3:1 minimum for focus indicators, so light sections
-     use midnight (13.8:1). Brass stays on the dark bands: 6.6:1 on midnight, 4.4:1 on oxblood. */
-  :focus-visible { outline: 3px solid var(--color-midnight); outline-offset: 3px; }
-  :where(.bg-midnight, .bg-oxblood) :focus-visible { outline-color: var(--color-brass); }
+  html { background: var(--color-paper); color: var(--color-midnight); scroll-behavior: smooth; }
+  body { font-family: var(--font-body); font-size: 1.125rem; line-height: 1.55; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: .94; letter-spacing: -.012em; }
+  h2 { font-size: clamp(3.2rem, 6vw, 6.5rem); }
+  a { text-underline-offset: .2em; }
+  :focus-visible { outline: 3px solid var(--color-oxblood); outline-offset: 3px; }
+  :where(.bg-midnight, .bg-oxblood, .hero) :focus-visible { outline-color: var(--color-brass); }
   ::selection { background: var(--color-brass); color: var(--color-midnight); }
 }
-
 @layer components {
-  .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
+  .wrap { width: min(80rem, 100% - 2.5rem); margin-inline: auto; }
   .prose-measure { max-width: 65ch; }
-  .btn {
-    display: inline-block; padding: 0.7rem 1.3rem; border-radius: 2px;
-    font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
-    background: var(--color-brass); color: var(--color-midnight); text-decoration: none;
-  }
-  .btn:hover { background: var(--color-white); }
-  .btn-quiet { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
+  .section-pad { padding-block: clamp(4.5rem, 9vw, 8rem); }
+  .eyebrow { font-family: var(--font-display); font-weight: 800; font-size: .95rem; letter-spacing: .13em; line-height: 1.3; }
+  .btn { display: inline-block; padding: .85rem 1.45rem; border-radius: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; letter-spacing: .03em; background: var(--color-brass); color: var(--color-midnight); text-decoration: none; cursor: pointer; transition: background .2s, transform .2s; }
+  .btn:hover { background: var(--color-white); transform: translateY(-2px); }
+  .btn-quiet { background: transparent; color: inherit; box-shadow: inset 0 0 0 1px currentColor; }
   .btn-quiet:hover { background: transparent; color: var(--color-brass); }
-  .field {
-    width: 100%; padding: 0.7rem 0.9rem; border-radius: 2px; font: inherit;
-    background: var(--color-white); color: var(--color-midnight); border: 2px solid var(--color-denim-soft);
-  }
+  .field { width: 100%; padding: .75rem 1rem; border-radius: 0; font: inherit; background: var(--color-white); color: var(--color-midnight); border: 2px solid var(--color-denim-soft); }
   .field:focus { border-color: var(--color-denim); outline: none; }
+  .text-link { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: .15rem; cursor: pointer; }
+  .text-link:hover { color: var(--color-brass); }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+.site-header { position: relative; z-index: 20; border-bottom: 1px solid #ffffff24; }
+.site-header .wrap { min-height: 5.2rem; }
+.header-listen { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; text-decoration: none; color: var(--color-brass); border: 1px solid var(--color-brass); padding: .35rem .8rem; }
+.header-listen:hover { color: white; }
+.hero { min-height: min(850px, calc(100svh - 5.2rem)); position: relative; display: grid; align-items: stretch; overflow: hidden; background: #090b0d; }
+.hero-image { position: absolute; inset: 0 0 0 38%; background-image: linear-gradient(90deg, #090b0d 0%, transparent 35%), linear-gradient(0deg,#090b0d 0%,transparent 34%),url('/images/vonjay-rain.png'); background-size: cover; background-position: center 40%; filter: contrast(1.12); opacity: .86; }
+.hero-inner { position: relative; display: flex; justify-content: space-between; align-items: end; padding-block: clamp(5rem, 10vw, 9rem) 3rem; }
+.hero-copy { max-width: 58rem; z-index: 1; }
+.hero h1 { font-size: clamp(6.5rem, 21vw, 19rem); letter-spacing: -.055em; line-height: .74; margin: 1.5rem 0 2.5rem; white-space: nowrap; }
+.hero-line { font-size: clamp(1.45rem, 2.8vw, 2.7rem); max-width: 33rem; line-height: 1.2; }
+.hero-release { border-left: 2px solid var(--color-brass); padding-left: 1rem; margin-top: 3.5rem; display: flex; flex-direction: column; gap: .25rem; }
+.hero-release strong { font-family: var(--font-display); font-size: 2.2rem; line-height: 1; }
+.hero-number { font-family: var(--font-display); writing-mode: vertical-rl; letter-spacing: .2em; color: var(--color-brass); }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+.section-heading > p { max-width: 17rem; }
+.release-card { border-top: 1px solid currentColor; padding-top: 1.25rem; margin-top: 1rem; }
+.release-art { aspect-ratio: 1.18; display: grid; place-items: center; position: relative; overflow: hidden; background: radial-gradient(circle at 75% 20%, #595045, #201f22 55%, #101317); background-size: cover; background-position: center; color: #ffffff2d; }
+.release-art > span { font-family: var(--font-display); font-size: clamp(6rem, 12vw, 11rem); font-weight: 900; letter-spacing: -.08em; line-height: 1; }
+.release-play { position: absolute; inset: auto 1.1rem 1.1rem auto; width: 3.4rem; height: 3.4rem; border: 1px solid #fff; border-radius: 50%; color: white; background: #0e1114d9; cursor: pointer; font-size: 1rem; }
+.release-play:hover { background: var(--color-brass); color: var(--color-midnight); }
+.release-card h3 { margin-top: 1.1rem; }
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(2rem, 8vw, 8rem); }
+.story-photo { margin-block: -2.5rem; transform: rotate(-2deg); box-shadow: 18px 18px 0 #cba77722; }
+.story-photo img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.story-copy { padding-block: 7rem; }
+.story-copy h2 { margin-block: 1rem 2rem; }
+.story-copy > p:not(.eyebrow) { max-width: 33rem; color: var(--color-mist); font-size: 1.3rem; }
+.catalog-teaser { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+.catalog-type { font: 900 clamp(10rem, 30vw, 28rem)/.7 var(--font-display); letter-spacing: -.1em; color: #0e11141a; white-space: nowrap; }
+.catalog-type span { color: var(--color-brass); }
+.closing-strip { padding-block: 5rem; display: flex; justify-content: space-between; align-items: end; gap: 2rem; }
+.closing-strip h2 { font-size: clamp(2.8rem, 5vw, 5rem); margin-top: .7rem; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 6vw; padding-block: 4rem; }
+.about-photo img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.about-intro h1, .press-hero h1 { font-size: clamp(5rem, 12vw, 12rem); margin-top: 1rem; }
+.about-body, .press-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; }
+.about-body h2, .press-grid h2 { margin-top: 1rem; }
+.song-heading { display: grid; grid-template-columns: 1.2fr .8fr; gap: 3rem; align-items: center; padding-block: 4rem; }
+.song-heading h1 { font-size: clamp(5rem, 12vw, 12rem); margin-top: 1rem; }
+.song-art { aspect-ratio: 1; display: grid; place-items: center; background: radial-gradient(circle at 75% 20%, #595045, #201f22 55%, #101317); background-size: cover; color: #ffffff50; font: 900 clamp(8rem, 20vw, 18rem)/1 var(--font-display); letter-spacing: -.09em; }
+.song-art span { color: var(--color-brass); }
+.song-detail { display: grid; grid-template-columns: 1.6fr .8fr; gap: 6vw; }
+.stream-links { display: grid; margin-top: 1rem; border-top: 1px solid currentColor; }
+.stream-links a { display: flex; justify-content: space-between; padding: .85rem 0; border-bottom: 1px solid #0e11143b; text-decoration: none; font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; }
+.press-hero { padding-block: 6rem; background-image: linear-gradient(90deg, #0e1114 30%, #0e1114a1 75%), url('/images/vonjay-rain.png'); background-size: cover; background-position: 80% 40%; }
+.press-tracks { margin-top: 1.5rem; }
+.press-tracks li { border-bottom: 1px solid #0e11143b; display: flex; align-items: center; gap: 1rem; padding: 1rem 0; font: 700 1.4rem var(--font-display); }
+.press-tracks a { flex: 1; text-decoration: none; }
+.press-tracks button { border: 1px solid; border-radius: 50%; width: 2.5rem; height: 2.5rem; cursor: pointer; }
+.press-photos { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 2rem; max-width: 52rem; margin-top: 2.5rem; }
+.press-photos img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.press-photos figcaption { font-size: 1rem; padding-top: .5rem; }
+.persistent-player { position: fixed; z-index: 100; bottom: 0; left: 0; right: 0; color: white; background: #101317; border-top: 2px solid var(--color-brass); padding: .7rem 1.25rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 -15px 40px #0008; }
+.persistent-player[hidden] { display: none; }
+.player-open, body:has(.persistent-player:not([hidden])) { padding-bottom: 108px; }
+.player-meta { display: flex; align-items: center; gap: .8rem; min-width: 12rem; }
+.player-meta small { display: block; font: 700 .75rem var(--font-display); color: var(--color-brass); letter-spacing: .12em; }
+.player-meta strong { display: block; font: 800 1.5rem var(--font-display); white-space: nowrap; }
+.player-mark { font: 900 2rem var(--font-display); color: var(--color-brass); }
+.player-actions { display: flex; align-items: center; gap: 1rem; font: 700 1rem var(--font-display); }
+.player-actions button { font: 400 2rem var(--font-body); cursor: pointer; line-height: 1; }
+.persistent-player iframe { flex: 1; min-width: 0; }
+@media (max-width: 800px) {
+  .header-listen { display: none; }
+  .hero { min-height: 710px; }
+  .hero-image { inset: 0; background-image: linear-gradient(0deg,#090b0d 0%,#090b0dcc 32%,#090b0d00 85%),url('/images/vonjay-rain.png'); background-position: center top; background-size: auto 75%; background-repeat: no-repeat; }
+  .hero-inner { align-items: end; }
+  .hero h1 { font-size: clamp(6.5rem, 20vw, 11rem); }
+  .hero-number { display: none; }
+  .story-grid, .about-grid, .about-body, .press-grid, .song-heading, .song-detail { grid-template-columns: 1fr; }
+  .story-photo { max-width: 34rem; margin: 3rem 0 0; }
+  .story-copy { padding-block: 4rem; }
+  .about-photo { max-width: 35rem; }
+  .song-art { grid-row: 1; max-width: 28rem; }
+  .persistent-player { flex-wrap: wrap; gap: .4rem 1rem; }
+  .persistent-player iframe { order: 3; flex-basis: 100%; height: 80px; }
+  .player-actions { margin-left: auto; }
+  .player-open, body:has(.persistent-player:not([hidden])) { padding-bottom: 155px; }
 }
+@media (max-width: 550px) {
+  .site-header .wrap { justify-content: center; gap: .2rem 1.5rem; padding-block: .5rem; }
+  .site-header nav { width: 100%; display: flex; justify-content: center; }
+  .site-header nav ul { font-size: 1rem; gap: 1.2rem; }
+  .hero { min-height: 670px; }
+  .hero h1 { font-size: 22vw; margin-bottom: 1rem; }
+  .hero-line { font-size: 1.45rem; }
+  .hero-release { margin-top: 2rem; }
+  .section-heading, .catalog-teaser, .closing-strip { display: block; }
+  .catalog-type { display: none; }
+  .section-heading > p, .closing-strip > div + div { margin-top: 1rem; }
+  .press-photos { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

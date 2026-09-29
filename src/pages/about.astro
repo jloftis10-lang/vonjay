@@ -1,34 +1,15 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import RouteLine from '../components/RouteLine.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
 import { getReleases } from '../lib/content';
-
 const artist = await getEntry('artists', 'vonjay');
-if (!artist) throw new Error('Missing src/content/artists/vonjay.md');
-const { Content } = await render(artist);
-const releases = (await getReleases()).filter((r) => r.data.artist.id === artist.id);
+if (!artist) throw new Error('Missing artist');
+const releases = (await getReleases()).filter((r) => r.data.artist.id === artist.id).slice(0, 3);
 ---
-<Base title="About" description={artist.data.short} image={artist.data.photo}>
-  <section class="bg-midnight text-white">
-    <div class="wrap grid gap-10 py-14 md:grid-cols-[1fr_1fr] md:items-end">
-      <div>
-        <h1 class="text-8xl md:text-[10rem]">{artist.data.name}</h1>
-        <p class="mt-4 text-xl text-mist prose-measure">{artist.data.short}</p>
-        {artist.data.hometown && <p class="mt-2 text-denim-soft">{artist.data.hometown}</p>}
-        <div class="mt-10 max-w-md"><RouteLine /></div>
-      </div>
-      {artist.data.photo
-        ? <img src={artist.data.photo} alt={artist.data.name} class="w-full rounded-sm object-cover" />
-        : <div class="aspect-[4/5] w-full bg-denim/40 grid place-items-center text-denim-soft">Photo coming soon</div>}
-    </div>
-  </section>
-  <section class="wrap py-16 prose-measure space-y-4"><Content /></section>
-  <section class="wrap pb-8">
-    <h2 class="text-5xl">Discography</h2>
-    <div class="mt-8 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-      {releases.map((r) => <ReleaseCard release={r} />)}
-    </div>
-  </section>
+<Base title="About" description={`Meet ${artist.data.name}. ${artist.data.short}`} image="/images/vonjay-seated.png">
+  <section class="about-hero bg-midnight text-white"><div class="wrap about-grid"><div class="about-photo"><img src="/images/vonjay-seated.png" alt="Portrait of VonJay seated" /></div><div class="about-intro"><p class="eyebrow text-brass">THE ARTIST</p><h1>MEET<br /><span class="text-brass">VONJAY.</span></h1><p class="text-2xl mt-8 max-w-lg">{artist.data.short}</p><div class="mt-10 max-w-md"><RouteLine /></div></div></div></section>
+  <section class="section-pad bg-paper"><div class="wrap about-body"><div><p class="eyebrow">CHICAGO / NASHVILLE / ATLANTA</p><h2>Three cities.<br />One voice.</h2></div><div class="prose-measure"><p>The city names are part of how VonJay describes his sound. Hear the connections for yourself in the music.</p><p class="mt-6">This is the beginning of his story. A fuller biography, in Jon’s own words, is on its way.</p><a href="/music" class="text-link mt-8 inline-block">Listen to the music ↗</a></div></div></section>
+  <section class="section-pad bg-midnight text-white"><div class="wrap"><p class="eyebrow text-brass">LISTEN NEXT</p><h2>A few places to start.</h2><div class="mt-10 grid gap-8 md:grid-cols-3">{releases.map((r) => <ReleaseCard release={r} />)}</div></div></section>
 </Base>

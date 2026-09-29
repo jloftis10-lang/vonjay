@@ -2,10 +2,14 @@
 import type { CollectionEntry } from 'astro:content';
 interface Props { release: CollectionEntry<'releases'>; }
 const { release } = Astro.props;
-const { title, date } = release.data;
+const { title, date, cover, soundcloudUrl } = release.data;
 const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
-<article class="group border-t-2 border-midnight pt-4">
+<article class="release-card group">
+  <div class="release-art" style={cover ? `background-image:url(${cover})` : undefined} aria-hidden="true">
+    {!cover && <span>VJ<span class="text-brass">.</span></span>}
+    <button class="release-play" type="button" data-play-track data-title={title} data-url={soundcloudUrl} aria-label={`Play ${title}`}>▶</button>
+  </div>
   <h3 class="text-3xl md:text-4xl">
     <a href={`/music/${release.id}`} class="no-underline group-hover:text-oxblood">{title}</a>
   </h3>

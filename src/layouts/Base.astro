@@ -2,13 +2,16 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PersistentPlayer from '../components/PersistentPlayer.astro';
+import { ClientRouter } from 'astro:transitions';
 import { site } from '../site.config';
 
 interface Props { title?: string; description?: string; image?: string; }
-const { title, description = site.tagline, image = '/og-default.png' } = Astro.props;
+const { title, description = site.tagline, image = '/images/vonjay-rain.png' } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
+const artistSchema = { '@context': 'https://schema.org', '@type': 'MusicGroup', name: site.name, url: Astro.site?.toString(), sameAs: Object.values(site.socials).filter(Boolean) };
 ---
 <!doctype html>
 <html lang="en">
@@ -23,7 +26,9 @@ const ogImage = new URL(image, Astro.site);
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(artistSchema)} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <ClientRouter />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
@@ -33,5 +38,6 @@ const ogImage = new URL(image, Astro.site);
     <Header />
     <main id="main" class="flex-1"><slot /></main>
     <Footer />
+    <PersistentPlayer transition:persist />
   </body>
 </html>

@@ -4,7 +4,7 @@ export const site = {
   name: 'VonJay',
   tagline: 'Chicago, a touch of Nashville melting into Atlanta.',
   location: 'Smyrna, Georgia',
-  domain: 'vonjaymusic.com',
+  domain: 'vonjay.vercel.app',
   contactEmail: '', // TODO(jon): public booking/contact email
   storeUrl: 'https://vonjay.base44.app/',
   storeName: 'Von Jay Productions',

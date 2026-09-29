@@ -3,50 +3,38 @@ import { render, getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import SoundCloudEmbed from '../../components/SoundCloudEmbed.astro';
 import EmailSignup from '../../components/EmailSignup.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
 import { getReleases } from '../../lib/content';
 
 export async function getStaticPaths() {
   const releases = await getReleases();
   return releases.map((release) => ({ params: { slug: release.id }, props: { release } }));
 }
-
 const { release } = Astro.props;
 const { title, date, soundcloudUrl, streaming, credits, cover } = release.data;
 const artist = await getEntry(release.data.artist);
 const { Content } = await render(release);
+const releases = await getReleases();
+const next = releases.filter((r) => r.id !== release.id).slice(0, 2);
 const fmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' });
-const links = [
-  ['SoundCloud', soundcloudUrl], ['Spotify', streaming.spotify],
-  ['Apple Music', streaming.appleMusic], ['YouTube', streaming.youtube],
-].filter(([, href]) => href) as [string, string][];
+const links = [ ['SoundCloud', soundcloudUrl], ['Spotify', streaming.spotify], ['Apple Music', streaming.appleMusic], ['YouTube', streaming.youtube] ].filter(([, href]) => href) as [string, string][];
+const schema = { '@context': 'https://schema.org', '@type': 'MusicRecording', name: title, byArtist: { '@type': 'MusicGroup', name: artist?.data.name ?? 'VonJay', url: Astro.site?.toString() }, datePublished: date.toISOString().slice(0, 10), url: new URL(Astro.url.pathname, Astro.site).toString(), sameAs: soundcloudUrl };
 ---
-<Base title={title} description={`${title} by ${artist?.data.name}`} image={cover}>
-  <section class="bg-midnight text-white">
-    <div class="wrap py-14">
-      <p class="font-display text-xl font-bold text-brass">
-        <a href="/about" class="no-underline hover:text-white">{artist?.data.name}</a>
-      </p>
-      <h1 class="mt-2 text-7xl md:text-9xl">{title}</h1>
-      <p class="mt-4 text-mist">Released <time datetime={date.toISOString()}>{fmt.format(date)}</time></p>
-      <div class="mt-8 max-w-3xl"><SoundCloudEmbed url={soundcloudUrl} title={title} /></div>
-    </div>
-  </section>
-  <section class="wrap grid gap-12 py-16 md:grid-cols-[2fr_1fr]">
-    <div class="prose-measure space-y-4"><Content /></div>
-    <aside class="space-y-8">
-      <div>
-        <h2 class="text-3xl">Listen</h2>
-        <ul class="mt-3 space-y-1">{links.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
-      </div>
-      {credits.length > 0 && (
-        <div>
-          <h2 class="text-3xl">Credits</h2>
-          <dl class="mt-3 space-y-2">
-            {credits.map((c) => <div><dt class="text-denim">{c.role}</dt><dd>{c.name}</dd></div>)}
-          </dl>
-        </div>
-      )}
-    </aside>
-  </section>
+<Base title={title} description={`Listen to ${title} by ${artist?.data.name} on SoundCloud.`} image={cover ?? '/images/vonjay-rain.png'}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <section class="song-hero bg-midnight text-white"><div class="wrap song-heading"><div><a href="/music" class="eyebrow text-brass no-underline">← ALL MUSIC</a><p class="eyebrow mt-12">VONJAY / RELEASE</p><h1>{title}</h1><p class="mt-5 text-mist">Released <time datetime={date.toISOString()}>{fmt.format(date)}</time></p><button class="btn mt-8" type="button" data-play-track data-title={title} data-url={soundcloudUrl}>▶ &nbsp; Play {title}</button></div><div class="song-art" style={cover ? `background-image:url(${cover})` : undefined} aria-hidden="true">{!cover && <>VJ<span>.</span></>}</div></div></section>
+  <section class="section-pad bg-paper"><div class="wrap song-detail"><div><p class="eyebrow">LISTEN HERE</p><div class="mt-5"><SoundCloudEmbed url={soundcloudUrl} title={title} /></div><div class="song-content mt-10"><Content /></div></div><aside><p class="eyebrow">LISTEN ON</p><div class="stream-links">{links.map(([label, href]) => <a href={href} target="_blank" rel="noopener noreferrer">{label} <span aria-hidden="true">↗</span></a>)}</div>{credits.length > 0 && <div class="mt-12"><h2 class="text-3xl">Credits</h2><dl class="mt-5">{credits.map((c) => <div class="mb-3"><dt class="text-denim">{c.role}</dt><dd>{c.name}</dd></div>)}</dl></div>}<button type="button" class="text-link mt-8" id="share-song">Share this song ↗</button></aside></div></section>
+  <section class="section-pad bg-midnight text-white"><div class="wrap"><p class="eyebrow text-brass">KEEP LISTENING</p><h2>More from VonJay.</h2><div class="mt-10 grid gap-8 md:grid-cols-2">{next.map((r) => <ReleaseCard release={r} />)}</div></div></section>
   <EmailSignup />
 </Base>
+<script>
+  document.addEventListener('click', async (event) => {
+    if (!(event.target as Element)?.closest('#share-song')) return;
+    if (navigator.share) await navigator.share({ title: document.title, url: location.href }).catch(() => {});
+    else {
+      await navigator.clipboard.writeText(location.href).catch(() => {});
+      const button = document.querySelector('#share-song');
+      if (button) button.textContent = 'Link copied';
+    }
+  });
+</script>

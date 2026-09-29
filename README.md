@@ -1,6 +1,6 @@
 # VonJay
 
-Artist website for VonJay (Jon Viberg), Smyrna, Georgia. Lives at vonjaymusic.com.
+Artist website for VonJay (Jon Viberg), Smyrna, Georgia. Current public URL: vonjay.vercel.app. Update the Astro `site` URL and `site.config.ts` when a custom domain is connected.
 
 ```bash
 npm install
@@ -9,7 +9,7 @@ npm run dev            # http://localhost:4321
 ```
 
 - **Add a song:** drop a markdown file in `src/content/releases/` (copy an existing one). It appears on Home, Music and About.
-- **Bio, photo:** `src/content/artists/vonjay.md`.
+- **Bio, photos:** `src/content/artists/vonjay.md` and `public/images/`. The supplied portraits are around 500 px wide; replace with high-resolution originals when available.
 - **Site facts, socials, store link:** `src/site.config.ts`.
 - **Database:** run `supabase/migrations/001_init.sql` in the Supabase SQL editor.
 - **Deploy:** import the repo in Vercel and add the env vars from `.env.example`.

@@ -1,28 +1,12 @@
 ---
-import { getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { getReleases } from '../lib/content';
 import { site } from '../site.config';
-const artist = await getEntry('artists', 'vonjay');
-const top = (await getReleases()).filter((r) => r.data.featured).slice(0, 3);
+const releases = await getReleases();
+const top = ['song-unsung', 'one-king', 'stop-digging'].map((id) => releases.find((r) => r.id === id)).filter((r) => !!r);
 ---
-<Base title="Press kit" description={`Bio, photos and music for press and bookers covering ${site.name}.`}>
-  <section class="wrap py-16 space-y-12">
-    <h1 class="text-7xl md:text-8xl">Press kit</h1>
-    <div class="prose-measure space-y-3">
-      <h2 class="text-4xl">Short bio</h2>
-      <p>{artist?.data.short}</p>
-      <!-- TODO(jon): 50-word and 150-word bios. -->
-    </div>
-    <div>
-      <h2 class="text-4xl">Songs to hear</h2>
-      <ul class="mt-3 space-y-1">{top.map((r) => <li><a href={`/music/${r.id}`}>{r.data.title}</a></li>)}</ul>
-    </div>
-    <div class="prose-measure">
-      <h2 class="text-4xl">Photos</h2>
-      <p class="mt-3 text-denim">High-resolution photos coming soon.</p>
-      <!-- TODO(jon): add press photos to /public/press and link downloads here. -->
-    </div>
-    <p><a href="/contact" class="btn">Contact for press</a></p>
-  </section>
+<Base title="Press & booking" description={`Music, portraits and booking contact for ${site.name}.`}>
+  <section class="press-hero bg-midnight text-white"><div class="wrap"><p class="eyebrow text-brass">PRESS / BOOKING / COLLABORATION</p><h1>VONJAY<br /><span class="text-brass">PRESS KIT.</span></h1><p class="text-xl max-w-xl mt-7">Music, artist photos and a direct line for inquiries.</p></div></section>
+  <section class="section-pad bg-paper"><div class="wrap press-grid"><div><p class="eyebrow">SHORT BIO</p><h2>Meet VonJay.</h2><p class="mt-6 prose-measure">VonJay makes music shaped by Chicago, a touch of Nashville melting into Atlanta. Explore the songs below, and reach out for booking, press or collaboration.</p><a class="btn mt-8" href="/contact">Send an inquiry</a></div><div><p class="eyebrow">START WITH THESE</p><ul class="press-tracks">{top.map((r, i) => <li><span>0{i + 1}</span><a href={`/music/${r.id}`}>{r.data.title} ↗</a><button type="button" data-play-track data-title={r.data.title} data-url={r.data.soundcloudUrl} aria-label={`Play ${r.data.title}`}>▶</button></li>)}</ul></div></div></section>
+  <section class="section-pad bg-midnight text-white"><div class="wrap"><p class="eyebrow text-brass">ARTIST PHOTOS</p><h2>VonJay in frame.</h2><div class="press-photos"><figure><img src="/images/vonjay-rain.png" alt="Black and white rain portrait of VonJay" loading="lazy" /><figcaption>Rain portrait · <a href="/images/vonjay-rain.png" download>Download image</a></figcaption></figure><figure><img src="/images/vonjay-seated.png" alt="VonJay seated in a warm portrait" loading="lazy" /><figcaption>Seated portrait · <a href="/images/vonjay-seated.png" download>Download image</a></figcaption></figure></div><p class="text-mist mt-6 text-sm">These downloads are web-size images. For print or other photo needs, use the contact form.</p></div></section>
 </Base>

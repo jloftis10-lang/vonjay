@@ -2,9 +2,9 @@
 import { site, nav } from '../site.config';
 const path = Astro.url.pathname;
 ---
-<header class="bg-midnight text-white">
+<header class="site-header bg-midnight text-white">
   <div class="wrap flex flex-wrap items-center justify-between gap-4 py-4">
-    <a href="/" class="font-display text-2xl font-black no-underline tracking-tight">{site.name}</a>
+    <a href="/" class="font-display text-3xl font-black no-underline tracking-tight uppercase">{site.name}<span class="text-brass">.</span></a>
     <nav aria-label="Main">
       <ul class="flex flex-wrap gap-x-6 gap-y-1 text-lg font-display font-bold">
         {nav.map((item) => {
@@ -16,7 +16,9 @@ const path = Astro.url.pathname;
             </li>
           );
         })}
+        <li><a class="no-underline hover:text-brass" href={site.storeUrl} target="_blank" rel="noopener noreferrer">Store</a></li>
       </ul>
     </nav>
+    <a class="header-listen" href="/music">Listen <span aria-hidden="true">↗</span></a>
   </div>
 </header>

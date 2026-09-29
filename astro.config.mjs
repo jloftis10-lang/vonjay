@@ -4,7 +4,7 @@ import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://vonjaymusic.com',
+  site: 'https://vonjay.vercel.app',
   adapter: vercel(),
   // Server secrets are read at runtime via astro:env/server. import.meta.env inlines them at
   // build time instead: a build without them compiled the API routes into permanent failures.
