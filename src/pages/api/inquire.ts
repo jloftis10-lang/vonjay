@@ -1,10 +1,14 @@
 import type { APIRoute } from 'astro';
+import { RESEND_FROM, INQUIRY_TO } from 'astro:env/server';
 import { supabaseAdmin, resend, json, isEmail, clean } from '../../lib/server';
+import { isInquiryType } from '../../lib/inquiry';
+import { site } from '../../site.config';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const body = await request.json().catch(() => ({}));
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== 'object') return json({ error: 'invalid' }, 400);
   if (body.company) return json({ ok: true }); // honeypot
 
   const inquiry = {
@@ -13,7 +17,7 @@ export const POST: APIRoute = async ({ request }) => {
     email: clean(body.email, 254).toLowerCase(),
     message: clean(body.message, 5000),
   };
-  if (!inquiry.name || !inquiry.message || !isEmail(inquiry.email)) return json({ error: 'invalid' }, 400);
+  if (!isInquiryType(inquiry.type) || !inquiry.name || !inquiry.message || !isEmail(inquiry.email)) return json({ error: 'invalid' }, 400);
 
   try {
     const { error } = await supabaseAdmin().from('inquiries').insert(inquiry);
@@ -24,15 +28,15 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // Notification is best-effort: the inquiry is already saved.
-  const to = import.meta.env.INQUIRY_TO;
+  const to = INQUIRY_TO;
   const client = resend();
-  if (client && to) {
+  if (client && to && RESEND_FROM) {
     await client.emails
       .send({
-        from: import.meta.env.RESEND_FROM,
+        from: RESEND_FROM,
         to,
         replyTo: inquiry.email,
-        subject: `[VonJay Music] ${inquiry.type}: ${inquiry.name}`,
+        subject: `[${site.name}] ${inquiry.type}: ${inquiry.name}`,
         text: `${inquiry.name} <${inquiry.email}>\n${inquiry.type}\n\n${inquiry.message}`,
       })
       .catch((err) => console.error('inquiry email failed', err));

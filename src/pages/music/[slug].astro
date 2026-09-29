@@ -24,7 +24,7 @@ const links = [
   <section class="bg-midnight text-white">
     <div class="wrap py-14">
       <p class="font-display text-xl font-bold text-brass">
-        <a href={`/artists/${artist?.id}`} class="no-underline hover:text-white">{artist?.data.name}</a>
+        <a href="/about" class="no-underline hover:text-white">{artist?.data.name}</a>
       </p>
       <h1 class="mt-2 text-7xl md:text-9xl">{title}</h1>
       <p class="mt-4 text-mist">Released <time datetime={date.toISOString()}>{fmt.format(date)}</time></p>

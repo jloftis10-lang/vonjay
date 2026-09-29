@@ -21,7 +21,10 @@
   body { font-family: var(--font-body); font-size: 1.125rem; line-height: 1.65; }
   h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.005em; }
   a { text-underline-offset: 0.2em; }
-  :focus-visible { outline: 3px solid var(--color-brass); outline-offset: 3px; }
+  /* Brass on mist is 2.1:1, under the 3:1 minimum for focus indicators, so light sections
+     use midnight (13.8:1). Brass stays on the dark bands: 6.6:1 on midnight, 4.4:1 on oxblood. */
+  :focus-visible { outline: 3px solid var(--color-midnight); outline-offset: 3px; }
+  :where(.bg-midnight, .bg-oxblood) :focus-visible { outline-color: var(--color-brass); }
   ::selection { background: var(--color-brass); color: var(--color-midnight); }
 }
 

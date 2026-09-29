@@ -1,11 +1,12 @@
 ---
-const types = ['Booking a show', 'Production work', 'Press or interview', 'Something else'];
+import { inquiryTypes } from '../lib/inquiry';
 ---
 <form data-inquiry class="grid gap-5 prose-measure" novalidate>
   <div class="grid gap-2">
     <label for="inq-type" class="font-semibold">What’s this about?</label>
     <select id="inq-type" name="type" class="field" required>
-      {types.map((t) => <option>{t}</option>)}
+      <option value="">Choose one</option>
+      {inquiryTypes.map((t) => <option>{t}</option>)}
     </select>
   </div>
   <div class="grid gap-2">
@@ -19,7 +20,7 @@ const types = ['Booking a show', 'Production work', 'Press or interview', 'Somet
   <div class="grid gap-2">
     <label for="inq-message" class="font-semibold">Details</label>
     <textarea id="inq-message" name="message" rows="6" class="field" required
-      placeholder="Dates, location, budget, links to your music: whatever helps."></textarea>
+      placeholder="Dates, location, budget: whatever helps."></textarea>
   </div>
   <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
   <div><button type="submit" class="btn">Send inquiry</button></div>

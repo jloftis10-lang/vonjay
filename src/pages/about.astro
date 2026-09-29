@@ -1,18 +1,34 @@
 ---
+import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import RouteLine from '../components/RouteLine.astro';
-import { site } from '../site.config';
+import ReleaseCard from '../components/ReleaseCard.astro';
+import { getReleases } from '../lib/content';
+
+const artist = await getEntry('artists', 'vonjay');
+if (!artist) throw new Error('Missing src/content/artists/vonjay.md');
+const { Content } = await render(artist);
+const releases = (await getReleases()).filter((r) => r.data.artist.id === artist.id);
 ---
-<Base title="About" description={`${site.name} is a production company in ${site.location}.`}>
+<Base title="About" description={artist.data.short} image={artist.data.photo}>
   <section class="bg-midnight text-white">
-    <div class="wrap py-16">
-      <h1 class="text-7xl md:text-8xl">About VonJay Music</h1>
-      <div class="mt-10 max-w-lg"><RouteLine /></div>
+    <div class="wrap grid gap-10 py-14 md:grid-cols-[1fr_1fr] md:items-end">
+      <div>
+        <h1 class="text-8xl md:text-[10rem]">{artist.data.name}</h1>
+        <p class="mt-4 text-xl text-mist prose-measure">{artist.data.short}</p>
+        {artist.data.hometown && <p class="mt-2 text-denim-soft">{artist.data.hometown}</p>}
+        <div class="mt-10 max-w-md"><RouteLine /></div>
+      </div>
+      {artist.data.photo
+        ? <img src={artist.data.photo} alt={artist.data.name} class="w-full rounded-sm object-cover" />
+        : <div class="aspect-[4/5] w-full bg-denim/40 grid place-items-center text-denim-soft">Photo coming soon</div>}
     </div>
   </section>
-  <section class="wrap py-16 prose-measure space-y-5">
-    <p class="text-xl">{site.tagline}</p>
-    <!-- TODO(jon): company story — why Georgia, why now, what it stands for. -->
-    <!-- TODO(jon + Jimmy): team section. Decide who is named and with what titles. -->
+  <section class="wrap py-16 prose-measure space-y-4"><Content /></section>
+  <section class="wrap pb-8">
+    <h2 class="text-5xl">Discography</h2>
+    <div class="mt-8 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+      {releases.map((r) => <ReleaseCard release={r} />)}
+    </div>
   </section>
 </Base>
